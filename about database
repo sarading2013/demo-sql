@@ -1,0 +1,28 @@
+1.
+show databases;
+
+
+2. create database
+
+create database mysql_one character set utf8;
+or create database mysql_one charset utf8
+
+
+3. check the character of the database
+
+show create database mysql_one;
+
+
+4.alter database character
+
+alter database mysql_one character set latin1;
+
+5. into or transfer to another database
+
+use mysql_one
+
+
+6.show the database in use now
+
+select database();
+
