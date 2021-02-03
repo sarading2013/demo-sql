@@ -1,0 +1,43 @@
+1. check tables in the database in use
+
+show tables;
+
+
+2. create table
+
+create table phone_table(pid INT, name char(20), price INT);
+
+
+3.show the information in the table
+
+show create table phone_table;
+
+desc phone_table;
+
+
+4. add column
+
+alter table phone_table add color char(18);
+
+
+5.delete colulmn
+
+alter table phone_table drop price;
+
+
+6. modify
+
+alter table phone_table modify name varchar(19);
+
+
+7. change
+
+alter table phone_table change name pname varchar(29);
+
+
+
+
+
+
+
+
