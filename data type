@@ -1,0 +1,46 @@
+1. INT
+
+TINYINT	  -128-- 127
+SMALLINT	-32768-- 32767
+MEDIUMINT	-2^23-- 2^23-1
+INT	      -2^31-- 2^31-1
+BIGINT	  -2^63-- 2^63-1
+
+
+2. string
+
+CHAR(n)	    0 -- 255 characters       FIXED length
+VARCHAR(n)	0 -- 65535 characters     VARIABLE length
+TEXT	      0 -- 65535 characters
+LONGTEXT	  0 -- 2^32-1 characters
+BLOB	      0 -- 65535 characters
+LONGBLOB	  0 -- 2^32-1 characters
+
+
+3. float
+
+Float	  Float(m,n)	 m is the total digits number, n is the total digits number after point 
+Double	Double(m,n)	
+Decimal	Decimal(m,n)	
+
+
+4. date time
+
+DATE	    YYYY-MM-DD	
+TIME	    HH:MM:SS	
+YEAR	    YYYY	
+DATETIME	YYYY-MM-DD HH:MM:SS	
+TIMESTAMP	A timestamp: 2038-01-09 03:14:07
+
+
+5. choose one
+
+enum(choice_one, chice_two, choice_three, .....)
+
+for example: enum(female, male)
+
+
+
+
+
+
