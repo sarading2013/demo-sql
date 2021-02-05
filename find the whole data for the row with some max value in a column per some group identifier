@@ -1,0 +1,67 @@
+1. create a table and insert into values
+
+create table if not existed 'docs'(
+   'id' int(6) unsigned not null,
+   'rev' int(3) unsigned not null,
+   'content' varchar(200) not null,
+   primary key ('id', 'rev')
+   ) default charset=utf8;
+   
+insert into 'docs' ('id', 'rev', 'content') values
+  ('1', '1', 'The earth is flat'),
+  ('2', '1', 'One hundred angels can dance on the head of a pin'),
+  ('1', '2', 'The earth is flat and rests on a bull\'s horn'),
+  ('1', '3', 'The earth is like a ball.');
+  
+
+2. questions: 
+   How do I select one row per id and only the greatest rev?
+   
+
+3. solutions:
+  select id, max(rev), content from docs
+    group by id;
+    
+  result:
+  +----+-----+---------------------------------------------------+
+| id | rev | content                                           |
++----+-----+---------------------------------------------------+
+|  1 |   3 | The earth is like a ball.                         |
+|  2 |   1 | One hundred angels can dance on the head of a pin |
++----+-----+---------------------------------------------------+
+    
+
+4. there is a very common question in SQL: find the whole data for the row with some max value in a column per some group identifier.
+    
+  4.1 Joining with simple group-identifier, max-value-in-group Sub-query
+  
+    select a.id, a.rev, a.content from docs a
+      inner join (select id, max(rev) rev
+                   from docs
+                   group by id) b on a.id=b.id and
+                                     a.rev=b.rev
+                                     
+    result:
+    +----+-----+---------------------------------------------------+
+| id | rev | content                                           |
++----+-----+---------------------------------------------------+
+|  1 |   3 | The earth is like a ball.                         |
+|  2 |   1 | One hundred angels can dance on the head of a pin |
++----+-----+---------------------------------------------------+
+
+   4.2 Left Joining with self, tweaking join conditions and filters
+      select a.* from docs a
+        left outer join docs b on
+          a.id=b.id and a.rev<b.rev
+            where b.id is null;
+   result:
+   +----+-----+---------------------------------------------------+
+| id | rev | content                                           |
++----+-----+---------------------------------------------------+
+|  1 |   3 | The earth is like a ball.                         |
+|  2 |   1 | One hundred angels can dance on the head of a pin |
++----+-----+---------------------------------------------------+
+     
+   
+  
+  
