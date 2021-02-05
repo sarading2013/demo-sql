@@ -1,0 +1,311 @@
+1. create table:
+
+create table users_two(
+  id serial unique,
+  username varchar(200),
+  fname varchar(200),
+  lname varchar(200),
+  primary key (id)
+  ) default charset=utf8;
+  
+  insert into users_two(username, fname, lname) values
+   ('foobar', 'Foo', 'Bar'),
+  ('fizbar', 'Fiz', 'Bar'),
+  ('foobaz', 'Foo', 'Baz'),
+  ('fizbaz', 'Fiz', 'Baz'),
+  ('boofar', 'Boo', 'Far'),
+  ('boofiz', 'Boo', 'Fiz'),
+  ('foobar', 'Foo', 'Bar'),
+  ('fazbiz', 'Faz', 'Biz'),
+  ('fizbaz', 'Fiz', 'Baz'),
+  ('farboo', 'Far', 'Boo'),
+  ('bizfaz', 'Biz', 'Faz'),
+  ('bizfaz', 'Biz', NULL),
+  ('bizfaz', NULL, 'Faz')
+  ;
+
+select * from users_two;
+
+result:
+
++----+----------+-------+-------+
+| id | username | fname | lname |
++----+----------+-------+-------+
+|  1 | foobar   | Foo   | Bar   |
+|  2 | fizbar   | Fiz   | Bar   |
+|  3 | foobaz   | Foo   | Baz   |
+|  4 | fizbaz   | Fiz   | Baz   |
+|  5 | boofar   | Boo   | Far   |
+|  6 | boofiz   | Boo   | Fiz   |
+|  7 | foobar   | Foo   | Bar   |
+|  8 | fazbiz   | Faz   | Biz   |
+|  9 | fizbaz   | Fiz   | Baz   |
+| 10 | farboo   | Far   | Boo   |
+| 11 | bizfaz   | Biz   | Faz   |
+| 12 | bizfaz   | Biz   | NULL  |
+| 13 | bizfaz   | NULL  | Faz   |
++----+----------+-------+-------+
+
+2. delete row from table
+
+delete from users_two 
+  where users_two.id=1 limit 1;
+
+result:
+
++----+----------+-------+-------+
+| id | username | fname | lname |
++----+----------+-------+-------+
+|  2 | fizbar   | Fiz   | Bar   |
+|  3 | foobaz   | Foo   | Baz   |
+|  4 | fizbaz   | Fiz   | Baz   |
+|  5 | boofar   | Boo   | Far   |
+|  6 | boofiz   | Boo   | Fiz   |
+|  7 | foobar   | Foo   | Bar   |
+|  8 | fazbiz   | Faz   | Biz   |
+|  9 | fizbaz   | Fiz   | Baz   |
+| 10 | farboo   | Far   | Boo   |
+| 11 | bizfaz   | Biz   | Faz   |
+| 12 | bizfaz   | Biz   | NULL  |
+| 13 | bizfaz   | NULL  | Faz   |
++----+----------+-------+-------+
+
+3. add row to the table:
+
+insert into users_two(id, username, fname, lname) values
+ (1, 'foobar', 'Foo', 'Bar');
+
+result:
+
++----+----------+-------+-------+
+| id | username | fname | lname |
++----+----------+-------+-------+
+|  1 | foobar   | Foo   | Bar   |
+|  2 | fizbar   | Fiz   | Bar   |
+|  3 | foobaz   | Foo   | Baz   |
+|  4 | fizbaz   | Fiz   | Baz   |
+|  5 | boofar   | Boo   | Far   |
+|  6 | boofiz   | Boo   | Fiz   |
+|  7 | foobar   | Foo   | Bar   |
+|  8 | fazbiz   | Faz   | Biz   |
+|  9 | fizbaz   | Fiz   | Baz   |
+| 10 | farboo   | Far   | Boo   |
+| 11 | bizfaz   | Biz   | Faz   |
+| 12 | bizfaz   | Biz   | NULL  |
+| 13 | bizfaz   | NULL  | Faz   |
++----+----------+-------+-------+
+
+ 4. read from the table:
+ 
+ SELECT lname, fname FROM users_two
+  WHERE lname LIKE '%z';
+  
+  result:
+  +-------+-------+
+| fname | lname |
++-------+-------+
+| Foo   | Baz   |
+| Fiz   | Baz   |
+| Boo   | Fiz   |
+| Faz   | Biz   |
+| Fiz   | Baz   |
+| Biz   | Faz   |
+| NULL  | Faz   |
++-------+-------+
+
+SELECT lname, fname FROM users_two
+  WHERE fname LIKE 'B%';
+ 
+ result:
+ +-------+-------+
+| lname | fname |
++-------+-------+
+| Far   | Boo   |
+| Fiz   | Boo   |
+| Faz   | Biz   |
+| NULL  | Biz   |
++-------+-------+
+  
+
+SELECT lname, fname FROM users_two
+  WHERE fname LIKE '%a%';
+  
+  result:
+  +-------+-------+
+| lname | fname |
++-------+-------+
+| Biz   | Faz   |
+| Boo   | Far   |
++-------+-------+
+
+SELECT lname, fname FROM users_two
+  WHERE fname LIKE 'F_z'
+  OR lname LIKE 'B_z';
+  
+  result:
+  +-------+-------+
+| lname | fname |
++-------+-------+
+| Bar   | Fiz   |
+| Baz   | Foo   |
+| Baz   | Fiz   |
+| Biz   | Faz   |
+| Baz   | Fiz   |
++-------+-------+
+
+SELECT * FROM users_two
+  WHERE username LIKE '%FO%';
+  
+  result:
+  +----+----------+-------+-------+
+| id | username | fname | lname |
++----+----------+-------+-------+
+|  1 | foobar   | Foo   | Bar   |
+|  3 | foobaz   | Foo   | Baz   |
+|  7 | foobar   | Foo   | Bar   |
++----+----------+-------+-------+
+
+SELECT lname, fname FROM users_two
+  WHERE fname IS NULL
+  OR lname IS NULL;
+  
+  result:
+  +-------+-------+
+| lname | fname |
++-------+-------+
+| NULL  | Biz   |
+| Faz   | NULL  |
++-------+-------+
+
+
+SELECT DISTINCT username FROM users_two;
+
+result:
++----------+
+| username |
++----------+
+| foobar   |
+| fizbar   |
+| foobaz   |
+| fizbaz   |
+| boofar   |
+| boofiz   |
+| fazbiz   |
+| farboo   |
+| bizfaz   |
++----------+
+
+SELECT * FROM users_two ORDER BY username DESC;
+
+result:
++----+----------+-------+-------+
+| id | username | fname | lname |
++----+----------+-------+-------+
+|  3 | foobaz   | Foo   | Baz   |
+|  1 | foobar   | Foo   | Bar   |
+|  7 | foobar   | Foo   | Bar   |
+|  4 | fizbaz   | Fiz   | Baz   |
+|  9 | fizbaz   | Fiz   | Baz   |
+|  2 | fizbar   | Fiz   | Bar   |
+|  8 | fazbiz   | Faz   | Biz   |
+| 10 | farboo   | Far   | Boo   |
+|  6 | boofiz   | Boo   | Fiz   |
+|  5 | boofar   | Boo   | Far   |
+| 11 | bizfaz   | Biz   | Faz   |
+| 12 | bizfaz   | Biz   | NULL  |
+| 13 | bizfaz   | NULL  | Faz   |
++----+----------+-------+-------+
+
+
+SELECT * FROM users_two ORDER BY username DESC LIMIT 1;
+
+result:
++----+----------+-------+-------+
+| id | username | fname | lname |
++----+----------+-------+-------+
+|  3 | foobaz   | Foo   | Baz   |
++----+----------+-------+-------+
+
+SELECT fname, lname FROM users_two
+  ORDER BY fname DESC, lname;
+  
+  result:
+  +-------+-------+
+| fname | lname |
++-------+-------+
+| Foo   | Bar   |
+| Foo   | Bar   |
+| Foo   | Baz   |
+| Fiz   | Bar   |
+| Fiz   | Baz   |
+| Fiz   | Baz   |
+| Faz   | Biz   |
+| Far   | Boo   |
+| Boo   | Far   |
+| Boo   | Fiz   |
+| Biz   | NULL  |
+| Biz   | Faz   |
+| NULL  | Faz   |
++-------+-------+
+ 
+ 
+5. update a table
+
+UPDATE users_two
+  SET fname = '(unspecified)'
+  WHERE fname IS NULL;
+
+SELECT * FROM users;
+
+result:
++----+----------+---------------+-------+
+| id | username | fname         | lname |
++----+----------+---------------+-------+
+|  1 | foobar   | Foo           | Bar   |
+|  2 | fizbar   | Fiz           | Bar   |
+|  3 | foobaz   | Foo           | Baz   |
+|  4 | fizbaz   | Fiz           | Baz   |
+|  5 | boofar   | Boo           | Far   |
+|  6 | boofiz   | Boo           | Fiz   |
+|  7 | foobar   | Foo           | Bar   |
+|  8 | fazbiz   | Faz           | Biz   |
+|  9 | fizbaz   | Fiz           | Baz   |
+| 10 | farboo   | Far           | Boo   |
+| 11 | bizfaz   | Biz           | Faz   |
+| 12 | bizfaz   | Biz           | NULL  |
+| 13 | bizfaz   | (unspecified) | Faz   |
++----+----------+---------------+-------+
+
+
+UPDATE users_two
+  SET username = 'UPDATED!'
+  WHERE fname = 'Foo'; 
+  
+  select * from users_two;
+  
+  result:
+  +----+----------+---------------+-------+
+| id | username | fname         | lname |
++----+----------+---------------+-------+
+|  1 | UPDATED! | Foo           | Bar   |
+|  2 | fizbar   | Fiz           | Bar   |
+|  3 | UPDATED! | Foo           | Baz   |
+|  4 | fizbaz   | Fiz           | Baz   |
+|  5 | boofar   | Boo           | Far   |
+|  6 | boofiz   | Boo           | Fiz   |
+|  7 | UPDATED! | Foo           | Bar   |
+|  8 | fazbiz   | Faz           | Biz   |
+|  9 | fizbaz   | Fiz           | Baz   |
+| 10 | farboo   | Far           | Boo   |
+| 11 | bizfaz   | Biz           | Faz   |
+| 12 | bizfaz   | Biz           | NULL  |
+| 13 | bizfaz   | (unspecified) | Faz   |
++----+----------+---------------+-------+
+  
+ 
+ 
+ 
+ 
+ 
+ 
+  
