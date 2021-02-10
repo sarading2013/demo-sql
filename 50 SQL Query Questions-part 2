@@ -1,0 +1,126 @@
+Q-26. Write an SQL query to show only odd rows from a table.
+
+show create database org;
++----------+-------------------------------------------------------------------------------------------------+
+| Database | Create Database                                                                                 |
++----------+-------------------------------------------------------------------------------------------------+
+| org      | CREATE DATABASE `org` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */ |
++----------+-------------------------------------------------------------------------------------------------+
+
+use org;
+
+select * from worker where mod(worker_id, 2)<>0;
++-----------+------------+-----------+--------+---------------------+------------+
+| worker_id | first_name | last_name | salary | joining_date        | department |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | monika     | arora     | 100000 | 2014-02-20 09:00:00 | hr         |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
++-----------+------------+-----------+--------+---------------------+------------+
+
+Q-27. Write an SQL query to show only even rows from a table.
+
+select * from worker where mod(worker_id, 2) =0;
++-----------+------------+-----------+--------+---------------------+------------+
+| worker_id | first_name | last_name | salary | joining_date        | department |
++-----------+------------+-----------+--------+---------------------+------------+
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+
+Q-28. Write an SQL query to clone a new table from another table.
+
+clone all the information from an existing table:
+
+create table worker_clone select * from worker;
+select * from worker;
++-----------+------------+-----------+--------+---------------------+------------+
+| worker_id | first_name | last_name | salary | joining_date        | department |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | monika     | arora     | 100000 | 2014-02-20 09:00:00 | hr         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+select * from worker_clone;
++-----------+------------+-----------+--------+---------------------+------------+
+| worker_id | first_name | last_name | salary | joining_date        | department |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | monika     | arora     | 100000 | 2014-02-20 09:00:00 | hr         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+
+shallow clone: just clone the existing table data structure and column attibutes, not clone the data in the table.
+
+create table worker_shallowclone like worker;
+Empty set (0.01 sec)
+
+
+deep clone: clone everything in the original table or part of it.
+
+clone everything from the original table just like the simple clone:
+create table worker_deepcloneall like worker;
+insert into worker_deepcloneall select * from worker;
++-----------+------------+-----------+--------+---------------------+------------+
+| worker_id | first_name | last_name | salary | joining_date        | department |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | monika     | arora     | 100000 | 2014-02-20 09:00:00 | hr         |
+|         2 | Niharika   | Verma     |  80000 | 2014-06-11 09:00:00 | Admin      |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
+|         7 | Satish     | Kumar     |  75000 | 2014-01-20 09:00:00 | Account    |
+|         8 | Geetika    | Chauhan   |  90000 | 2014-04-11 09:00:00 | Admin      |
++-----------+------------+-----------+--------+---------------------+------------+
+
+clone part of the original table:
+create table worker_deepclonepart like worker;
+insert into worker_deepclonepart select * from worker where salary>=100000;
+-----------+------------+-----------+--------+---------------------+------------+
+| worker_id | first_name | last_name | salary | joining_date        | department |
++-----------+------------+-----------+--------+---------------------+------------+
+|         1 | monika     | arora     | 100000 | 2014-02-20 09:00:00 | hr         |
+|         3 | Vishal     | Singhal   | 300000 | 2014-02-20 09:00:00 | HR         |
+|         4 | Amitabh    | Singh     | 500000 | 2014-02-20 09:00:00 | Admin      |
+|         5 | Vivek      | Bhati     | 500000 | 2014-06-11 09:00:00 | Admin      |
+|         6 | Vipul      | Diwan     | 200000 | 2014-06-11 09:00:00 | Account    |
++-----------+------------+-----------+--------+---------------------+------------+
+
+Q-29. Write an SQL query to fetch intersecting records of two tables.
+
+select * from worker 
+intersect 
+select * from worker_deepclonepart;
+
+Note: mysql 8.0 doesn't support the intersect operator.
+
+select worker.first_name, title.worker_title from worker 
+inner join title on worker.worker_id=title.worker_ref_id;
++------------+---------------+
+| first_name | worker_title  |
++------------+---------------+
+| monika     | Manager       |
+| Niharika   | Executive     |
+| Vishal     | Lead          |
+| Amitabh    | Asst. Manager |
+| Vivek      | Manager       |
+| Vipul      | Lead          |
+| Satish     | Executive     |
+| Geetika    | Executive     |
++------------+---------------+
+
+
